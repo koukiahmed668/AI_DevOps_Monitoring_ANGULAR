@@ -1,0 +1,173 @@
+<body>
+    <div class="container-fluid position-relative bg-white d-flex p-0">
+        <!-- Spinner Start -->
+        <div *ngIf="loading" id="spinner" class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+            <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
+              <span class="sr-only">Loading...</span>
+            </div>
+        </div>
+        <!-- Spinner End -->
+
+        <!-- Sidebar Start -->
+        <div class="sidebar pe-4 pb-3">
+            <nav class="navbar bg-light navbar-light">
+                <a href="index.html" class="navbar-brand mx-4 mb-3">
+                    <h3 class="text-primary"><i class="fa fa-server me-2"></i>DevOpsMon</h3>
+                </a>
+                <div class="d-flex align-items-center ms-4 mb-4">
+                    <div class="position-relative">
+                        <img class="rounded-circle" src="../../assets/user.jpg" alt="" style="width: 40px; height: 40px;">
+                        <div class="bg-success rounded-circle border border-2 border-white position-absolute end-0 bottom-0 p-1"></div>
+                    </div>
+                    <div class="ms-3">
+                        <h6 class="mb-0">{{company.name}}</h6>
+                        <span>Admin</span>
+                    </div>
+                </div>
+                <div class="navbar-nav w-100">
+                    <a routerLink="/dashboard" class="nav-item nav-link active"><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
+                    <a href="#" class="nav-item nav-link"><i class="fa fa-memory me-2"></i>System Metrics</a>
+                    <a routerLink="/pipelines" class="nav-item nav-link"><i class="fa fa-code-branch me-2"></i>CI/CD Pipelines</a>
+                    <a href="#" class="nav-item nav-link"><i class="fa fa-database me-2"></i>Disk Usage</a>
+                </div>
+            </nav>
+        </div>
+        <!-- Sidebar End -->
+
+        <!-- Content Start -->
+        <div class="content">
+            <!-- Navbar Start -->
+            <nav class="navbar navbar-expand bg-light navbar-light sticky-top px-4 py-0">
+                <a href="#" class="sidebar-toggler flex-shrink-0">
+                    <i class="fa fa-bars"></i>
+                </a>
+                <form class="d-none d-md-flex ms-4">
+                    <input class="form-control border-0" type="search" placeholder="Search metrics...">
+                </form>
+                <div class="navbar-nav align-items-center ms-auto">
+                    <div class="nav-item dropdown">
+                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
+                            <i class="fa fa-envelope me-lg-2"></i>
+                            <span class="d-none d-lg-inline-flex">Alerts</span>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-end bg-light border-0 rounded-0 rounded-bottom m-0">
+                            <a href="#" class="dropdown-item">
+                                <h6 class="fw-normal mb-0">High CPU usage detected</h6>
+                                <small>5 minutes ago</small>
+                            </a>
+                            <hr class="dropdown-divider">
+                            <a href="#" class="dropdown-item">
+                                <h6 class="fw-normal mb-0">Disk space low</h6>
+                                <small>15 minutes ago</small>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="nav-item dropdown">
+                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
+                            <img class="rounded-circle me-lg-2" src="../../assets/user.jpg" alt="" style="width: 40px; height: 40px;">
+                            <span class="d-none d-lg-inline-flex">{{company.name}}</span>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-end bg-light border-0 rounded-0 rounded-bottom m-0">
+                            <a href="#" class="dropdown-item">My Profile</a>
+                            <a (click)="logout()" class="dropdown-item">Log Out</a>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+            <!-- Navbar End -->
+
+            <!-- Metrics Overview Start -->
+            <div class="container-fluid pt-4 px-4">
+                <div class="row g-4">
+                    <div class="col-sm-6 col-xl-3">
+                        <div class="bg-light rounded d-flex align-items-center justify-content-between p-4">
+                            <i class="fa fa-microchip fa-3x text-primary"></i>
+                            <div class="ms-3">
+                                <p class="mb-2">CPU Usage</p>
+                                <h4 class="mb-0">{{cpuUsage}}%</h4>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-xl-3">
+                        <div class="bg-light rounded d-flex align-items-center justify-content-between p-4">
+                            <i class="fa fa-memory fa-3x text-primary"></i>
+                            <div class="ms-3">
+                                <p class="mb-2">Memory Usage</p>
+                                <h4 class="mb-0">{{memoryUsage}}%</h4>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-xl-3">
+                        <div class="bg-light rounded d-flex align-items-center justify-content-between p-4">
+                            <i class="fa fa-database fa-3x text-primary"></i>
+                            <div class="ms-3">
+                                <p class="mb-2">Disk Usage</p>
+                                <h4 class="mb-0">{{diskUsage}}%</h4>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-xl-3">
+                        <div class="bg-light rounded d-flex align-items-center justify-content-between p-4">
+                            <i class="fa fa-code-branch fa-3x text-primary"></i>
+                            <div class="ms-3">
+                                <p class="mb-2">CI/CD Pipelines</p>
+                                <h6 class="mb-0">3 Active</h6>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-xl-6">
+                        <div class="bg-light rounded p-4">
+                            <h6 class="mb-4">Doughnut Chart - System Health</h6>
+                            <canvas id="doughnutChartCanvas"></canvas>
+                        </div>
+                    </div>
+                    <iframe 
+                    src="http://localhost:3000/d/fe5mmevcml7nke/monitor?orgId=1&from=1733076522849&to=1733077422849&timezone=browser&refresh=5s&theme=light&panelId=1&__feature.dashboardSceneSolo"
+                    style="width: 600px; height: 400px;" 
+                        frameborder="0">
+                    </iframe>
+
+                </div>
+            </div>
+            <!-- Metrics Overview End -->
+
+            <!-- Recent Alerts Start -->
+            <div class="container-fluid pt-4 px-4">
+                <div class="bg-light text-center rounded p-4">
+                    <div class="d-flex align-items-center justify-content-between mb-4">
+                        <h6 class="mb-0">Recent Alerts</h6>
+                        <a href="">Show All</a>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table text-start align-middle table-bordered table-hover mb-0">
+                            <thead>
+                                <tr class="text-dark">
+                                    <th scope="col">Timestamp</th>
+                                    <th scope="col">Metric</th>
+                                    <th scope="col">Value</th>
+                                    <th scope="col">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>2024-11-28 12:34:56</td>
+                                    <td>CPU Usage</td>
+                                    <td>85%</td>
+                                    <td class="text-danger">Critical</td>
+                                </tr>
+                                <tr>
+                                    <td>2024-11-28 12:20:34</td>
+                                    <td>Disk Usage</td>
+                                    <td>92%</td>
+                                    <td class="text-warning">Warning</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <!-- Recent Alerts End -->
+        </div>
+        <!-- Content End -->
+    </div>
+</body>
